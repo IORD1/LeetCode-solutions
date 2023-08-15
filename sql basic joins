@@ -7,6 +7,14 @@ select customer_id, COUNT(customer_id) AS count_no_trans from Visits left join T
 
 select T2.id as ID from Weather T1 join Weather T2 on DATEDIFF (T1.recordDate, T2.recordDate) = -1 AND T2.temperature > T1.temperature;
 
+select Employee.name, bonus.bonus from Employee left join bonus on employee.empId = bonus.empId where bonus < 1000 or bonus is null;
+
+
+select s.student_id, student_name, su.subject_name, count(e.subject_name) as attended_exams from 
+Students s join Subjects su left join Examinations e 
+on s.student_id = e.student_id and su.subject_name = e.subject_name 
+group by s.student_id, su.subject_name 
+order by s.student_id, su.subject_name; 
 
 
 ========================================
@@ -403,10 +411,207 @@ from Activity a
 group by a.machine_id
 ===========================================================
  
+577. Employee Bonus
+Easy
+467
+144
+Companies
+SQL Schema
+
+Table: Employee
+
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| empId       | int     |
+| name        | varchar |
+| supervisor  | int     |
+| salary      | int     |
++-------------+---------+
+empId is the primary key column for this table.
+Each row of this table indicates the name and the ID of an employee in addition to their salary and the id of their manager.
+
+ 
+
+Table: Bonus
+
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| empId       | int  |
+| bonus       | int  |
++-------------+------+
+empId is the primary key column for this table.
+empId is a foreign key to empId from the Employee table.
+Each row of this table contains the id of an employee and their respective bonus.
+
+ 
+
+Write an SQL query to report the name and bonus amount of each employee with a bonus less than 1000.
+
+Return the result table in any order.
+
+The query result format is in the following example.
+
+ 
+
+Example 1:
+
+Input: 
+Employee table:
++-------+--------+------------+--------+
+| empId | name   | supervisor | salary |
++-------+--------+------------+--------+
+| 3     | Brad   | null       | 4000   |
+| 1     | John   | 3          | 1000   |
+| 2     | Dan    | 3          | 2000   |
+| 4     | Thomas | 3          | 4000   |
++-------+--------+------------+--------+
+Bonus table:
++-------+-------+
+| empId | bonus |
++-------+-------+
+| 2     | 500   |
+| 4     | 2000  |
++-------+-------+
+Output: 
++------+-------+
+| name | bonus |
++------+-------+
+| Brad | null  |
+| John | null  |
+| Dan  | 500   |
++------+-------+
+
+sol:
+select Employee.name, bonus.bonus from Employee left join bonus on employee.empId = bonus.empId where bonus < 1000 or bonus is null;
+
+
+========================================================
+1280. Students and Examinations
+Easy
+801
+99
+Companies
+SQL Schema
+Pandas Schema
+
+Table: Students
+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| student_id    | int     |
+| student_name  | varchar |
++---------------+---------+
+student_id is the primary key (column with unique values) for this table.
+Each row of this table contains the ID and the name of one student in the school.
+
+ 
+
+Table: Subjects
+
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| subject_name | varchar |
++--------------+---------+
+subject_name is the primary key (column with unique values) for this table.
+Each row of this table contains the name of one subject in the school.
+
+ 
+
+Table: Examinations
+
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| student_id   | int     |
+| subject_name | varchar |
++--------------+---------+
+There is no primary key (column with unique values) for this table. It may contain duplicates.
+Each student from the Students table takes every course from the Subjects table.
+Each row of this table indicates that a student with ID student_id attended the exam of subject_name.
+
+ 
+
+Write a solution to find the number of times each student attended each exam.
+
+Return the result table ordered by student_id and subject_name.
+
+The result format is in the following example.
+
+ 
+
+Example 1:
+
+Input: 
+Students table:
++------------+--------------+
+| student_id | student_name |
++------------+--------------+
+| 1          | Alice        |
+| 2          | Bob          |
+| 13         | John         |
+| 6          | Alex         |
++------------+--------------+
+Subjects table:
++--------------+
+| subject_name |
++--------------+
+| Math         |
+| Physics      |
+| Programming  |
++--------------+
+Examinations table:
++------------+--------------+
+| student_id | subject_name |
++------------+--------------+
+| 1          | Math         |
+| 1          | Physics      |
+| 1          | Programming  |
+| 2          | Programming  |
+| 1          | Physics      |
+| 1          | Math         |
+| 13         | Math         |
+| 13         | Programming  |
+| 13         | Physics      |
+| 2          | Math         |
+| 1          | Math         |
++------------+--------------+
+Output: 
++------------+--------------+--------------+----------------+
+| student_id | student_name | subject_name | attended_exams |
++------------+--------------+--------------+----------------+
+| 1          | Alice        | Math         | 3              |
+| 1          | Alice        | Physics      | 2              |
+| 1          | Alice        | Programming  | 1              |
+| 2          | Bob          | Math         | 1              |
+| 2          | Bob          | Physics      | 0              |
+| 2          | Bob          | Programming  | 1              |
+| 6          | Alex         | Math         | 0              |
+| 6          | Alex         | Physics      | 0              |
+| 6          | Alex         | Programming  | 0              |
+| 13         | John         | Math         | 1              |
+| 13         | John         | Physics      | 1              |
+| 13         | John         | Programming  | 1              |
++------------+--------------+--------------+----------------+
+Explanation: 
+The result table should contain all students and all subjects.
+Alice attended the Math exam 3 times, the Physics exam 2 times, and the Programming exam 1 time.
+Bob attended the Math exam 1 time, the Programming exam 1 time, and did not attend the Physics exam.
+Alex did not attend any exams.
+John attended the Math exam 1 time, the Physics exam 1 time, and the Programming exam 1 time.
+
+sol:
 
 
 
-\
+select s.student_id, student_name, su.subject_name, count(e.subject_name) as attended_exams from 
+Students s join Subjects su left join Examinations e 
+on s.student_id = e.student_id and su.subject_name = e.subject_name 
+group by s.student_id, su.subject_name 
+order by s.student_id, su.subject_name; 
 
 
 
