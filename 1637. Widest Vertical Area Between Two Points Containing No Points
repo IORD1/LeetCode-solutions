@@ -1,0 +1,88 @@
+Given n points on a 2D plane where points[i] = [xi, yi], Return the widest vertical area between two points such that no points are inside the area.
+
+A vertical area is an area of fixed-width extending infinitely along the y-axis (i.e., infinite height). The widest vertical area is the one with the maximum width.
+
+Note that points on the edge of a vertical area are not considered included in the area.
+
+ 
+
+Example 1:
+​
+
+Input: points = [[8,7],[9,9],[7,4],[9,7]]
+Output: 1
+Explanation: Both the red and the blue area are optimal.
+
+Example 2:
+
+Input: points = [[3,1],[9,0],[1,0],[1,4],[5,3],[8,8]]
+Output: 3
+
+ 
+
+Constraints:
+
+    n == points.length
+    2 <= n <= 105
+    points[i].length == 2
+    0 <= xi, yi <= 109
+
+sol:
+class Solution {
+public:
+    int maxWidthOfVerticalArea(vector<vector<int>>& points) {
+        vector<int> v;
+        for(int i=0;i<points.size(); i++){
+            v.push_back(points[i][0]);
+        }
+        int size = 0;
+        sort(v.begin(), v.end());
+
+        for(int i=0; i<v.size()-1; i++){
+            size = max(size, abs(v[i]-v[i+1]));
+        }
+        
+
+        cout<<size<<endl;
+
+
+
+
+
+
+
+
+        // int start = v[0];
+        // int end = v[1];
+        // int current = 0;
+        // for(int i=2; i<v.size(); i++){
+        //     if(v[i] < start){
+        //         int diff = abs(v[i]-start);
+        //         if(diff > size){
+        //             end = start;
+        //             start = v[i];
+        //         }
+        //     }else if(v[i] > start && v[i] < end){
+        //         int diff1 = abs(start-v[i]);
+        //         int diff2 = abs(end-v[i]);
+        //         if(diff1 < diff2){
+        //             start = v[i];
+        //         }else{
+        //             end = v[i];
+        //         }
+        //     }else if(v[i] > end){
+        //         int diff = abs(v[i]-end);
+        //         if(diff > size){
+        //             start = end;
+        //             end = v[i];
+        //         }
+        //     }
+        //     size =abs(start-end);
+
+
+        //     cout<<endl<<size<<endl;
+        // }
+
+        return size;
+    }
+};
