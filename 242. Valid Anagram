@@ -1,0 +1,76 @@
+Given two strings s and t, return true if t is an anagram of s, and false otherwise.
+
+An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+
+ 
+
+Example 1:
+
+Input: s = "anagram", t = "nagaram"
+Output: true
+
+Example 2:
+
+Input: s = "rat", t = "car"
+Output: false
+
+ 
+
+Constraints:
+
+    1 <= s.length, t.length <= 5 * 104
+    s and t consist of lowercase English letters.
+
+ 
+
+Follow up: What if the inputs contain Unicode characters? How would you adapt your solution to such a case?
+sol:
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+    //   int flag = true;
+    //     if(s.size() != t.size()){
+    //         return false;
+    //     }else{
+    //         while(s.size() > 0){
+    //             char c = s[0];
+    //             int flag = 0;
+    //             for(int i=0; i<t.size(); i++){
+    //                 if(t[i] == c){
+    //                     flag = 1;
+    //                     cout<<t[i]<<" ";
+    //                     t.erase(i,1);
+    //                     break;
+    //                 }
+    //             }
+    //             if(!flag){
+    //                 return false;
+    //             }
+    //             s.erase(0,1);
+    //         }
+    //     }
+    //     return true;
+
+
+    // sort(s.begin(), s.end());
+    // sort(t.begin(), t.end());
+    // return s == t;
+
+
+     if(s.length() != t.length()){
+            return false;
+        }
+        int arr[26] = {0};
+        for(int i=0; i<s.length(); i++){
+            arr[s[i]-'a']++;
+            arr[t[i]-'a']--;
+        }
+        for(int i=0; i<26; i++){
+            if(arr[i] != 0){
+                return false;
+            }
+        }
+        return true;
+
+    }
+};
