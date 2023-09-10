@@ -1,0 +1,119 @@
+Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
+
+The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+
+You must write an algorithm that runs in O(n) time and without using the division operation.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,3,4]
+Output: [24,12,8,6]
+
+Example 2:
+
+Input: nums = [-1,1,0,-3,3]
+Output: [0,0,9,0,0]
+
+ 
+
+Constraints:
+
+    2 <= nums.length <= 105
+    -30 <= nums[i] <= 30
+    The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+
+ 
+
+Follow up: Can you solve the problem in O(1) extra space complexity? (The output array does not count as extra space for space complexity analysis.)
+sol:
+class Solution {
+public:
+    // int returnDivided(int q,int d){
+    //     int i = 1;
+    //     while(true){
+    //         if((d*i) == q){
+    //             return i;
+    //         }
+    //         if((d*i) > q){
+    //             return -1;
+    //             break;
+    //         }
+    //         i++;
+    //     }
+
+    //     return -1;
+    // }
+
+
+
+    vector<int> productExceptSelf(vector<int>& nums) {
+        vector<int> ans;
+
+        // Aproach 1 time limit exceed
+        // for(int i=0; i<nums.size(); i++){
+        //     int leftProduct = 1, rightProduct = 1;
+        //     for(int j=0; j<i; j++){
+        //         leftProduct *= nums[j];
+        //     }
+        //     for(int j=i+1; j<nums.size(); j++){
+        //         rightProduct *= nums[j];
+        //     }
+
+        //     ans.push_back(leftProduct * rightProduct);
+        // }
+
+        // return ans;
+
+
+
+        
+        
+        // Aproach 2
+        // int product = 1;
+        // for(auto &k : nums){
+        //     product *= k;
+        // }
+
+        // for(int i=0; i<nums.size(); i++){
+        //     ans.push_back(returnDivided(product,nums[i]));
+        // }
+
+        // return ans;
+
+
+        // Aproach 3
+
+        vector<int> leftp;
+        int sie = nums.size();
+        vector<int> rightp(sie,1);
+        // vector<int> rightp;
+        int mul =1;
+        leftp.push_back(nums[0]);
+        for(int i=1; i<nums.size(); i++){
+            leftp.push_back(leftp[i-1] * nums[i]);
+        }
+
+
+        // rightp[0] = (nums[nums.size()-1]);
+        // rightp.push_back(nums[nums.size()-1]);
+        rightp[sie-1] = nums[sie-1];
+        for(int i=nums.size()-2; i>=0; i--){
+            rightp[i] = (rightp[i+1] * nums[i]);
+        }
+
+        // for(auto& k: rightp){
+        //     cout<<k<<" ";
+        // }        for(auto& k: leftp){
+        //     cout<<k<<" ";
+        // }
+        // reverse(rightp.begin(), rightp.end());
+        ans.push_back(rightp[1]);
+        for(int i=1; i<nums.size()-1; i++){
+            ans.push_back(leftp[i-1]*rightp[i+1]);
+        }
+        ans.push_back(leftp[nums.size()-2]);
+        return ans;
+    }
+};
