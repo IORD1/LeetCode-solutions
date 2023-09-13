@@ -1,0 +1,143 @@
+Given a list of strings words and a string pattern, return a list of words[i] that match pattern. You may return the answer in any order.
+
+A word matches the pattern if there exists a permutation of letters p so that after replacing every letter x in the pattern with p(x), we get the desired word.
+
+Recall that a permutation of letters is a bijection from letters to letters: every letter maps to another letter, and no two letters map to the same letter.
+
+ 
+
+Example 1:
+
+Input: words = ["abc","deq","mee","aqq","dkd","ccc"], pattern = "abb"
+Output: ["mee","aqq"]
+Explanation: "mee" matches the pattern because there is a permutation {a -> m, b -> e, ...}. 
+"ccc" does not match the pattern because {a -> c, b -> c, ...} is not a permutation, since a and b map to the same letter.
+
+Example 2:
+
+Input: words = ["a","b","c"], pattern = "a"
+Output: ["a","b","c"]
+
+ 
+
+Constraints:
+
+    1 <= pattern.length <= 20
+    1 <= words.length <= 50
+    words[i].length == pattern.length
+    pattern and words[i] are lowercase English letters.
+
+sol:
+class Solution {
+public:
+    // bool checkIfCorrect(string s,string pattern){
+    //     set<char> original;
+    //     set<char> tocheck;
+
+    //     original.insert(s.begin(), s.end());
+    //     tocheck.insert(pattern.begin(), pattern.end());
+    //     if(original.size() == tocheck.size()){
+            
+    //     }else{
+    //         return false;
+    //     }
+    //     return true;
+    // }
+
+    // bool checkWithHashMap(string s, string p){
+    //     unordered_map<char,vector<int>> mp;
+    //     for(int i=0; i<s.size(); i++){
+    //         mp[s[i]].push_back(i);
+    //     }
+    //     unordered_map<char,vector<int>> tocheckMap;
+    //     for(int i=0; i<s.size(); i++){
+    //         tocheckMap[p[i]].push_back(i);
+    //     }
+    //     cout<<endl<<s<<endl;
+    //     for (auto i : mp)
+    //     cout << i.second.size();
+
+    //     cout<<endl<<p<<endl;
+    //     for (auto i : tocheckMap)
+    //     cout << i.second.size() ;
+
+    //     if(mp.size() == tocheckMap.size()){
+    //         unordered_map<char,vector<int>>::iterator it = mp.begin();
+    //         unordered_map<char,vector<int>>::iterator checker = tocheckMap.begin();
+    //         while(it != mp.end() || checker != tocheckMap.end()){
+    //             // if(it->second != checker->second){
+    //             //     // cout<<it->first<<":";
+    //             //     // cout<<" < "<<checker->first<<endl;
+    //             //     // cout<<it->first<<": "<<it->second.size()<<endl;
+    //             //     // cout<<checker->first<<" : "<<checker->second.size()<<endl;
+    //             //     return false;
+    //             // }
+    //             if(it->second.size() != checker->second.size()){
+    //                 // cout<<it->first<<":";
+    //                 // cout<<" < "<<checker->first<<endl;
+    //                 // cout<<it->first<<": "<<it->second.size()<<endl;
+    //                 // cout<<checker->first<<" : "<<checker->second.size()<<endl;
+    //                 return false;
+    //             }
+    //             it++;
+    //             checker++;
+    //         }
+    //     }else{
+    //         return false;
+    //     }
+
+
+    //     return true;
+    // }
+
+    vector<string> findAndReplacePattern(vector<string>& words, string pattern) {
+    //     vector<string> ans;
+    //     // cout<<checkWithHashMap("deq","abb")<<endl;
+    //     for(int i=0; i<words.size(); i++){
+    //         if(checkWithHashMap(words[i],pattern)){
+    //             ans.push_back(words[i]);
+    //         }
+    //     }
+
+    //     return ans;
+
+
+    // sol 2
+    int i, j, flag=0;
+        vector<string> ans;
+        unordered_map<char, char> m;
+
+        for(i=0 ; i<words.size() ; i++)
+        {
+            flag=0;
+            for(j=0 ; j<words[i].size() ; j++)
+            {
+                for(auto it:m)
+                {
+                    if(it.first==pattern[j] && it.second!=words[i][j])
+                    {
+                        flag=1;
+                        break;
+                    }
+                    if(it.second==words[i][j] && it.first!=pattern[j])
+                    {
+                        flag=1;
+                        break;
+                    }
+                }
+                
+                if(flag==1)
+                {
+                    break;
+                }
+                m[pattern[j]] = words[i][j];
+            }
+            if(flag==0)
+            {
+                ans.push_back(words[i]);
+            }
+            m.clear();
+        }
+        return ans;
+    }
+};
