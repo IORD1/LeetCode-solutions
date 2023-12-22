@@ -1,0 +1,102 @@
+The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+
+P   A   H   N
+A P L S I I G
+Y   I   R
+And then read line by line: "PAHNAPLSIIGYIR"
+
+Write the code that will take a string and make this conversion given a number of rows:
+
+string convert(string s, int numRows);
+ 
+
+Example 1:
+
+Input: s = "PAYPALISHIRING", numRows = 3
+Output: "PAHNAPLSIIGYIR"
+Example 2:
+
+Input: s = "PAYPALISHIRING", numRows = 4
+Output: "PINALSIGYAHRPI"
+Explanation:
+P     I    N
+A   L S  I G
+Y A   H R
+P     I
+Example 3:
+
+Input: s = "A", numRows = 1
+Output: "A"
+ 
+
+Constraints:
+
+1 <= s.length <= 1000
+s consists of English letters (lower-case and upper-case), ',' and '.'.
+1 <= numRows <= 1000
+
+sol:
+class Solution {
+public:
+    string convert(string s, int numRows) {
+    // solution 1 map approach wrong results for correct output by testcases
+       map<int, string> m;
+        for(int i=0;i<numRows; i++){
+            m[i] = "";
+        }
+
+        int it = 0;
+        int middle = numRows-2;
+        int flag = 0;
+        while(it < s.size()){
+            if(flag == 0){
+                for(int i=0; i<numRows; i++){
+                    m[i] += s[it];
+                    it++;
+                }
+                flag = 1;
+            }else{
+                for(int i=0; i<middle; i++){
+                    m[numRows-i-2] += s[it];
+                    it++; 
+                }
+                flag = 0;
+            }
+        }
+        string ans;
+        for(int i=0;i<numRows; i++){
+            ans += m[i];
+        }
+
+        return ans;
+
+
+
+        // aproach 2 from solutions :
+        int n = numRows;
+        if(n==1)return s;
+        string ans="";
+        int j;
+        int m=s.size();
+        for(int i=1;i<=n;i++){
+            j=i;
+            if(i==1 || i==n){
+                while(j<=m){
+                    ans+=s[j-1];
+                    j=j+2*(n-1); 
+                }
+            }
+            else{
+                while(j<=s.size()){
+                    ans+=s[j-1];
+                    int tm=j;
+                    j+=2*(n-i);
+                    if(j-1<s.size()) ans+=s[j-1];
+                    j=tm+2*(n-1);
+                    
+                }
+            }
+        }
+        return ans;
+    }
+};
