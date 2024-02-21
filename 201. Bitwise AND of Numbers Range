@@ -1,0 +1,51 @@
+Given two integers left and right that represent the range [left, right], return the bitwise AND of all numbers in this range, inclusive.
+
+ 
+
+Example 1:
+
+Input: left = 5, right = 7
+Output: 4
+Example 2:
+
+Input: left = 0, right = 0
+Output: 0
+Example 3:
+
+Input: left = 1, right = 2147483647
+Output: 0
+ 
+
+Constraints:
+
+0 <= left <= right <= 231 - 1
+
+sol:
+
+class Solution {
+public:
+    int rangeBitwiseAnd(int left, int right) {
+        if(left == right) return left;
+        if (left == 0) return 0;
+        int len = log2(right);
+        int len2 = log2(left);
+        if(len != len2) return 0;
+        int diff = -1;
+
+        for(int i=len; i>=0; i--){
+            if((left & 1<<i) != (right & 1<<i)){
+
+            diff = i;
+            break;
+            }
+        }
+
+        int ans = right;
+
+        for(int i=0; i<=diff; i++){
+            if(ans & 1<<i) ans -= 1<<i;
+        }
+
+        return ans;
+    }
+};
