@@ -36,3 +36,26 @@ public:
         return ans;
     }
 };
+
+sol: kotlin :
+class Solution {
+    fun sortedSquares(nums: IntArray): IntArray {
+        // val ans = IntArray(nums.size)  
+        // for(i in nums.indices){
+        //     ans[i] = nums[i]*nums[i]
+        // }
+
+        // for(i in nums.indices){
+        //     for(j in i+1 until ans.size){
+        //         if(ans[i] > ans[j]){
+        //             var temp = ans[i]
+        //             ans[i] = ans[j]
+        //             ans[j] = temp
+        //         }
+        //     }
+        // }
+        val ans = IntArray(nums.size) { i -> nums[i] * nums[i] }
+        ans.sort()
+        return ans
+    }
+}
