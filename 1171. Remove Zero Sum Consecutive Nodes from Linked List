@@ -1,0 +1,111 @@
+Given the head of a linked list, we repeatedly delete consecutive sequences of nodes that sum to 0 until there are no such sequences.
+
+After doing so, return the head of the final linked list.  You may return any such answer.
+
+ 
+
+(Note that in the examples below, all sequences are serializations of ListNode objects.)
+
+Example 1:
+
+Input: head = [1,2,-3,3,1]
+Output: [3,1]
+Note: The answer [1,2,1] would also be accepted.
+Example 2:
+
+Input: head = [1,2,3,-3,4]
+Output: [1,2,4]
+Example 3:
+
+Input: head = [1,2,3,-3,-2]
+Output: [1]
+ 
+
+Constraints:
+
+The given linked list will contain between 1 and 1000 nodes.
+Each node in the linked list has -1000 <= node.val <= 1000.
+
+sol:
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeZeroSumSublists(ListNode* head) {
+        // aproach 1 doesn;t work with other conditions
+        // int flag = 1;
+        // if(!head->next->next){
+        //     if(head->val + head->next->val ==0){
+        //         head = NULL;
+        //         return head;
+        //     }
+        // }else{
+        //     while(flag == 1){
+        //         flag--;
+        //         ListNode* temp = head;
+        //         while(temp->next){
+        //             if(temp->val + temp->next->val == 0){
+        //                 ListNode* connect = head;
+        //                 while(connect->next != temp){
+        //                     connect = connect->next;
+        //                 }
+        //                 if(temp->next->next == NULL){
+        //                     connect->next = NULL;
+        //                 }else{
+        //                     connect->next = temp->next->next;
+        //                 }
+        //                 flag = 1;
+        //                 break;
+
+        //             }else{
+        //                 temp = temp->next;
+        //             }
+        //         }
+        //         cout<<flag<<endl;
+        //     }
+        // }
+
+
+        // return head;
+
+        // aproach 2 : hashmap
+
+        ListNode* falsehead = new ListNode(0);
+        falsehead->next = head;
+        int presum = 0;
+        unordered_map<int, ListNode*> mp;
+        mp[0] = falsehead;
+        ListNode* current = head;
+
+
+        while(current){
+            presum += current->val;
+            if(mp.find(presum) != mp.end()){
+                ListNode* deleteNodes = mp[presum]->next;
+                int temp_sum = presum + deleteNodes->val;
+                while(deleteNodes != current){
+                    mp.erase(temp_sum);
+                    deleteNodes = deleteNodes->next;
+                    temp_sum += deleteNodes->val;
+                }
+                mp[presum]->next = current->next;
+            }else{
+                mp[presum] = current;
+            }
+            current = current->next;
+        }
+
+
+        return falsehead->next;
+
+    }
+};
