@@ -1,0 +1,130 @@
+You are given the head of a singly linked-list. The list can be represented as:
+
+L0 → L1 → … → Ln - 1 → Ln
+Reorder the list to be on the following form:
+
+L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
+You may not modify the values in the list's nodes. Only nodes themselves may be changed.
+
+ 
+
+Example 1:
+
+
+Input: head = [1,2,3,4]
+Output: [1,4,2,3]
+Example 2:
+
+
+Input: head = [1,2,3,4,5]
+Output: [1,5,2,4,3]
+ 
+
+Constraints:
+
+The number of nodes in the list is in the range [1, 5 * 104].
+1 <= Node.val <= 1000
+
+sol:
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    void reorderList(ListNode* head) {
+        // slow method uses 3 pointer with O(n*n)
+        // ListNode* returnthis;
+        // ListNode* ourhead = head;
+        // ListNode* nexthead = head->next;
+        // int count = 0;
+        // ListNode* it = head;
+        // while(it != NULL){
+        //     it = it->next;
+        //     count++;
+        // }
+        // cout<<count<<endl;
+        // if(count == 1 || count == 2){
+        //     return ;
+        // }else if(count == 3){
+        //     head->next = head->next->next;
+        //     nexthead->next = NULL;
+        //     ourhead = ourhead->next;
+        //     ourhead->next = nexthead;
+        //     return;
+        // }
+        // count = count - 3;
+        // while(count--){
+        //     ListNode* gotoEnd = nexthead;
+        //     ListNode* followend = nexthead;
+        //     if(nexthead == NULL){return;}
+        //     while(gotoEnd->next != NULL ){
+        //         followend = gotoEnd;
+        //         gotoEnd = gotoEnd->next;
+
+        //     }
+        //     ourhead->next = gotoEnd;
+        //     followend->next = NULL;
+        //     ourhead = ourhead->next;
+        //     ourhead->next = nexthead;
+        //     ourhead = ourhead->next;
+        //     nexthead = nexthead->next;
+
+        // }
+
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+        while(fast->next != NULL &&  fast->next->next != NULL){
+            fast = fast->next->next;
+            slow = slow->next;
+        }
+
+        // cout<<fast->val<<endl;
+        // cout<<slow->val<<endl;
+
+        ListNode* nexthead = slow->next;
+        slow->next = NULL;
+
+        ListNode* prev = NULL;
+        ListNode* ourhead = nexthead;
+        ListNode* nexth = NULL;
+
+        while(ourhead != NULL){
+            nexth = ourhead->next;
+            ourhead->next = prev;
+            prev = ourhead;
+            ourhead = nexth;
+        }
+
+        nexthead = prev;
+ 
+
+        // ListNode* it = nexthead;
+        // while(it != NULL){
+        //     cout<<it->val<<"-";
+        //     it = it->next;
+        // }cout<<endl;
+
+        ListNode* first = head;
+        ListNode* second = nexthead;
+        while(second){
+            nexth = first->next;
+            prev = second->next;
+
+            first->next = second;
+            second->next = nexth;
+
+            first = nexth;
+            second = prev;
+        }
+       
+    }
+};
