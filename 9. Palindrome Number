@@ -34,19 +34,37 @@ sol:
 class Solution {
 public:
     bool isPalindrome(int x) {
-        string s = to_string(x);
-        int flag = true;
-        int last = s.size()-1;
-        int first = 0;
-        while(first <= last){
-            if(s[first] == s[last]){
-                first++;
-                last--;
-            }else{
-                flag = false;
-                break;
-            }
+        // Aproach 1 : convert to string
+        // string s = to_string(x);
+        // int flag = true;
+        // int last = s.size()-1;
+        // int first = 0;
+        // while(first <= last){
+        //     if(s[first] == s[last]){
+        //         first++;
+        //         last--;
+        //     }else{
+        //         flag = false;
+        //         break;
+        //     }
+        // }
+        // return flag;
+
+
+        // aproach 2 : without string
+        
+        if(x < 0){
+            return false;
         }
-        return flag;
+
+        long long copy = x;
+        long long a = 0;
+        while(copy > 0){
+            int part = copy%10;
+            a = a*10 + part;
+            copy /= 10;
+        }
+
+        return a == x;
     }
 };
