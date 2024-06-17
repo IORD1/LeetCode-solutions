@@ -1,0 +1,49 @@
+Given a non-negative integer c, decide whether there're two integers a and b such that a2 + b2 = c.
+
+ 
+
+Example 1:
+
+Input: c = 5
+Output: true
+Explanation: 1 * 1 + 2 * 2 = 5
+Example 2:
+
+Input: c = 3
+Output: false
+ 
+
+Constraints:
+
+0 <= c <= 231 - 1
+
+sol:
+
+class Solution {
+public:
+    bool judgeSquareSum(int c) {
+        // aproach 1 : brute force (doesn't workon large no.)
+        // bool flag = false;
+
+        // int a = 0, b = 0;
+        // for(int i=0; i<=c; i++){
+        //     for(int j=0; j<=c; j++){
+        //         if(pow(i,2) + pow(j,2) == c){
+        //             return true;
+        //         }
+        //     }
+        // }
+
+
+        // return flag;
+
+        // aproach 2 : Legendre's 2 square theorem
+        for(long a = 0 ; a*a <= c ; a++){
+            double b = sqrt(c - a*a);
+            if(b == (int) b){
+                return true;
+            }
+        }
+        return false;
+    }
+};
