@@ -1,0 +1,115 @@
+Given an array of integers nums and an integer limit, return the size of the longest non-empty subarray such that the absolute difference between any two elements of this subarray is less than or equal to limit.
+
+ 
+
+Example 1:
+
+Input: nums = [8,2,4,7], limit = 4
+Output: 2 
+Explanation: All subarrays are: 
+[8] with maximum absolute diff |8-8| = 0 <= 4.
+[8,2] with maximum absolute diff |8-2| = 6 > 4. 
+[8,2,4] with maximum absolute diff |8-2| = 6 > 4.
+[8,2,4,7] with maximum absolute diff |8-2| = 6 > 4.
+[2] with maximum absolute diff |2-2| = 0 <= 4.
+[2,4] with maximum absolute diff |2-4| = 2 <= 4.
+[2,4,7] with maximum absolute diff |2-7| = 5 > 4.
+[4] with maximum absolute diff |4-4| = 0 <= 4.
+[4,7] with maximum absolute diff |4-7| = 3 <= 4.
+[7] with maximum absolute diff |7-7| = 0 <= 4. 
+Therefore, the size of the longest subarray is 2.
+Example 2:
+
+Input: nums = [10,1,2,4,7,2], limit = 5
+Output: 4 
+Explanation: The subarray [2,4,7,2] is the longest since the maximum absolute diff is |2-7| = 5 <= 5.
+Example 3:
+
+Input: nums = [4,2,2,2,4,4,2,2], limit = 0
+Output: 3
+ 
+
+Constraints:
+
+1 <= nums.length <= 105
+1 <= nums[i] <= 109
+0 <= limit <= 109
+
+sol:
+
+class Solution {
+public:
+    // void test(vector<int> v, int limit, int& ans){
+    //     int n = v.size();
+    //     if(n == 0){
+    //         return ;
+    //     }
+    //     int maxNum = INT_MIN;
+    //     int minNum = INT_MAX;
+
+    //     for(int i=0; i<n; i++){
+    //         if(v[i] > maxNum){
+    //             maxNum = v[i];
+    //         }
+    //         if(v[i] < minNum){
+    //             minNum = v[i];
+    //         }
+    //     }cout<<endl;
+    //     if(abs(maxNum - minNum) <= limit){
+    //         if(n > ans){
+    //             ans = n;
+    //         }
+    //     }
+    //     vector<int> a = v;
+    //     a.erase(a.begin());
+    //     v.pop_back();
+    //    test(a,limit, ans);
+    //    test(v,limit, ans);
+    // }
+
+    int longestSubarray(vector<int>& nums, int limit) {
+       int n = nums.size();
+       // taking n as the size of the vector nums input 
+       int ans = 1;
+       // our answer set to one, because limit is 1min and ans can always be 1 
+       deque<int> minQ;
+       // for refrencing the minimu number 
+       deque<int> maxQ;
+       // for referencing the maximum number in given window
+
+
+       // iterating the input vector with left l and right r pointer 
+       // intialising the left and right pointer, r should be always less than the size of the vector input nums
+       for(int l=0, r=0; r<n; ++r){
+            // now we pop the back the deque untill we get the number greater than nums[r]
+            while(!minQ.empty() && minQ.back() > nums[r]){
+                minQ.pop_back();
+            }
+            //now e push that number nums[r] in minQ to keep track of this minimum number
+            minQ.push_back(nums[r]);
+            //now we do the same for trackin maxnum number 
+            while(!maxQ.empty() && maxQ.back() < nums[r]){
+                maxQ.pop_back();
+            }
+            maxQ.push_back(nums[r]);
+            while(maxQ.front() - minQ.front() > limit){
+                if(minQ.front() == nums[l])
+                {
+                    minQ.pop_front();
+                }
+
+                if(maxQ.front() == nums[l]){
+                    maxQ.pop_front();
+                }
+                l++;
+            }
+
+            ans = max(ans, r-l+1);
+       }
+
+       return ans;
+    }
+
+
+
+};
